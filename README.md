@@ -38,7 +38,7 @@ For Twitch:
 
 -   `client_id` and `client_secret` will be found in your Twitch API console.
 -   `user_id` will be found by manually calling Twitch Helix API or using an [external service](https://www.streamweasels.com/tools/convert-twitch-username-to-user-id/).
--   Copy [`tokens.YOUR_TWITCH_USER_ID.json.example`](https://raw.githubusercontent.com/Rivelia/naraka-autoad/master/tokens.YOUR_TWITCH_USER_ID.json.example) to `token.YOUR_TWITCH_USER_ID.json` (replace `YOUR_TWITCH_USER_ID` to the same one found previously)
+-   Copy [`tokens.YOUR_TWITCH_USER_ID.json.example`](https://raw.githubusercontent.com/Rivelia/naraka-autoad/master/tokens.YOUR_TWITCH_USER_ID.json.example) to `tokens.YOUR_TWITCH_USER_ID.json` (replace `YOUR_TWITCH_USER_ID` to the same one found previously)
     -   If you already know your twitch API access token and refresh token, put them in the json file.
     -   If you don't know your twitch API access token and refresh token (you will be required to clone this repository, and have the [Pre-requisites](#pre-requisites) section fulfilled):
         -   Make sure you have `http://localhost` as a redirect URI in your twitch API
@@ -49,7 +49,7 @@ For Twitch:
         ```sh
         node init.js
         ```
-        -   You will find your access token and refresh token in the console output, modify `token.YOUR_TWITCH_USER_ID.json` with them accordingly.
+        -   You will find your access token and refresh token in the console output, modify `tokens.YOUR_TWITCH_USER_ID.json` with them accordingly.
 
 For OBS:
 
