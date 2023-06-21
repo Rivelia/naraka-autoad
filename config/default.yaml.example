@@ -1,0 +1,13 @@
+twitch:
+  enable: true
+  client_id: YOUR_TWITCH_CLIENT_ID
+  client_secret: YOUR_TWITCH_CLIENT_SECRET
+  user_id: YOUR_TWITCH_USER_ID
+  commercial_time_seconds: 120
+obs:
+  enable: true
+  websocket_url: ws://127.0.0.1:4455
+  password: YOUR_OBS_WEBSOCKET_PASSWORD
+  lobby_scene: YOUR_OBS_LOBBY_SCENE_NAME
+  battle_lobby_scene: YOUR_OBS_BATTLE_LOBBY_SCENE_NAME
+  battle_scene: YOUR_OBS_BATTLE_SCENE_NAME

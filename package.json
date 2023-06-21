@@ -1,0 +1,21 @@
+{
+	"name": "naraka-autoad",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@twurple/api": "^6.2.1",
+		"@twurple/auth": "^6.2.1",
+		"config": "^3.3.9",
+		"js-yaml": "^4.1.0",
+		"obs-websocket-js": "^5.0.3",
+		"tail": "^2.2.6"
+	},
+	"type": "module"
+}

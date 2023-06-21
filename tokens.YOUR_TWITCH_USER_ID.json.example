@@ -1,0 +1,9 @@
+{
+	"accessToken": "YOUR_ACCESS_TOKEN",
+	"refreshToken": "YOUR_REFRESH_TOKEN",
+	"scope": [
+		"channel:edit:commercial"
+	],
+	"expiresIn": 0,
+	"obtainmentTimestamp": 0
+}
