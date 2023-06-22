@@ -110,16 +110,25 @@ const logPath = path.join(
 	const tail = new Tail(logPath, { useWatchFile: true, fromBeginning: true });
 	tail.on('line', (line) => {
 		if (line.includes('vivox OnEnterLobby')) {
+			if (gameState === GAME_STATE_LOBBY) {
+				return;
+			}
 			gameState = GAME_STATE_LOBBY;
 			lastGameStateChange = Date.now();
 			console.info('Game State: Lobby');
 			switchScene(config.get('obs.lobby_scene'));
 		} else if (line.includes('vivox OnEnterBattle')) {
+			if (gameState === GAME_STATE_BATTLE_LOBBY) {
+				return;
+			}
 			gameState = GAME_STATE_BATTLE_LOBBY;
 			lastGameStateChange = Date.now();
 			console.info('Game State: Battle Lobby');
 			switchScene(config.get('obs.battle_lobby_scene'));
 		} else if (line.includes('DoHideTeamOffLoadingPage')) {
+			if (gameState === GAME_STATE_BATTLE) {
+				return;
+			}
 			gameState = GAME_STATE_BATTLE;
 			lastGameStateChange = Date.now();
 			console.info('Game State: Battle');
