@@ -55,30 +55,31 @@ const logPath = path.join(
 	}
 
 	// Init OBS Integration
-	let obs = null;
+	let obs = new OBSWebSocket();
 	let isObsConnected = false;
-	if (obsEnabled) {
-		obs = new OBSWebSocket();
-		const obsUrl = config.get('obs.websocket_url');
-		const obsPassword = config.get('obs.password');
-		async function obsConnect() {
-			try {
-				const { obsWebSocketVersion, negotiatedRpcVersion } =
-					await obs.connect(obsUrl, obsPassword);
-				console.log(
-					`OBS Integration: connected to server ${obsWebSocketVersion} (using RPC ${negotiatedRpcVersion})`
-				);
-				isObsConnected = true;
-			} catch (error) {
-				console.error(
-					'OBS Integration: failed to connect',
-					error.code,
-					error.message
-				);
-				console.info('OBS Integration: retrying in 5s.');
-				setTimeout(obsConnect, 5000);
-			}
+
+	const obsUrl = config.get('obs.websocket_url');
+	const obsPassword = config.get('obs.password');
+	async function obsConnect() {
+		try {
+			const { obsWebSocketVersion, negotiatedRpcVersion } =
+				await obs.connect(obsUrl, obsPassword);
+			console.log(
+				`OBS Integration: connected to server ${obsWebSocketVersion} (using RPC ${negotiatedRpcVersion})`
+			);
+			isObsConnected = true;
+		} catch (error) {
+			console.error(
+				'OBS Integration: failed to connect',
+				error.code,
+				error.message
+			);
+			console.info('OBS Integration: retrying in 5s.');
+			setTimeout(obsConnect, 5000);
 		}
+	}
+
+	if (obsEnabled) {
 		obsConnect();
 	}
 
@@ -93,7 +94,13 @@ const logPath = path.join(
 			return;
 		}
 		console.info(`OBS Integration: switching to OBS Scene "${sceneName}"`);
-		obs.call('SetCurrentProgramScene', { sceneName });
+		try {
+			await obs.call('SetCurrentProgramScene', { sceneName });
+		} catch (error) {
+			console.error(
+				'OBS Integration: failed to switch scene. Is OBS running? Does the scene exist?'
+			);
+		}
 	}
 
 	let gameState = GAME_STATE_LOBBY;
@@ -121,7 +128,7 @@ const logPath = path.join(
 	});
 
 	tail.on('error', function (error) {
-		console.error('ERROR: ', error);
+		console.error('ERROR while attempting to read game state: ', error);
 	});
 
 	// Twitch Integration Loop
@@ -146,16 +153,22 @@ const logPath = path.join(
 			}
 
 			console.info(
-				`Twitch Integratino: stream is live, starting ${commercialSeconds}s commercial.`
+				`Twitch Integration: stream is live, starting ${commercialSeconds}s commercial.`
 			);
 
-			await twitch.channels.startChannelCommercial(
-				userId,
-				commercialSeconds
-			);
-			console.info(
-				`Twitch Integration: started ${commercialSeconds}s commercial.`
-			);
+			try {
+				await twitch.channels.startChannelCommercial(
+					userId,
+					commercialSeconds
+				);
+				console.info(
+					`Twitch Integration: started ${commercialSeconds}s commercial.`
+				);
+			} catch (error) {
+				console.error(
+					'Twitch Integration: failed to start commercial. Is a commercial running already?'
+				);
+			}
 
 			lastCommercial = Date.now();
 			setTimeout(twitchLoop, 1000);
