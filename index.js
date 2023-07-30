@@ -83,6 +83,7 @@ const logPath = path.join(
 		obsConnect();
 	}
 
+	let lastSceneName = '';
 	async function switchScene(sceneName) {
 		if (!obsEnabled) {
 			return;
@@ -91,15 +92,24 @@ const logPath = path.join(
 			console.warn(
 				'OBS Integration: OBS not connected yet, unable to switch scene.'
 			);
+			lastSceneName = '';
+			return;
+		}
+		if (lastSceneName === sceneName) {
+			console.info(
+				`OBS Integration: Already on scene ${sceneName}. Skipping change.`
+			);
 			return;
 		}
 		console.info(`OBS Integration: switching to OBS Scene "${sceneName}"`);
 		try {
 			await obs.call('SetCurrentProgramScene', { sceneName });
+			lastSceneName = sceneName;
 		} catch (error) {
 			console.error(
 				'OBS Integration: failed to switch scene. Is OBS running? Does the scene exist?'
 			);
+			lastSceneName = '';
 		}
 	}
 
@@ -146,7 +156,8 @@ const logPath = path.join(
 		async function twitchLoop() {
 			if (
 				gameState !== GAME_STATE_LOBBY ||
-				Date.now() - lastCommercial < 900000 // 15 minutes
+				Date.now() - lastCommercial < 900000 || // 15 minutes
+				Date.now() - lastGameStateChange < 20000 // wait at least 20 seconds before starting a commercial
 			) {
 				setTimeout(twitchLoop, 1000);
 				return;
